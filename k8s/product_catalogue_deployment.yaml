@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: product-catalogue
-        image: product-catalogue:latest
+        image: stoufaa/product-catalogue:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 5001
