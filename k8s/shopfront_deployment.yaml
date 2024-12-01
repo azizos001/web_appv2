@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: shopfront
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: shopfront
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: shopfront
-        image: shopfront:latest
+        image: stoufaa/shopfront:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 5000
