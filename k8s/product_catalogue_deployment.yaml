@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: product-catalogue
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: product-catalogue
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: product-catalogue
-        image: product-catalogue:latest
+        image: stoufaa/product-catalogue:V8
         imagePullPolicy: Never
         ports:
         - containerPort: 5001
