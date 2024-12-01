@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shopfront
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: shopfront
+  template:
+    metadata:
+      labels:
+        app: shopfront
+    spec:
+      containers:
+      - name: shopfront
+        image: shopfront:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: PRODUCT_SERVICE_URL
+          value: "http://product-catalogue:5001"
+        - name: STOCK_SERVICE_URL
+          value: "http://stock-manager:5002"
+        - name: USER_SERVICE_URL
+          value: "http://user-profile:5003"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10

@@ -1,0 +1,56 @@
+/* Custom styles */
+.nav-link {
+    @apply flex items-center space-x-1 text-gray-600 hover:text-indigo-600 transition-colors;
+}
+
+/* Form styles */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+textarea {
+    @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    @apply focus:border-indigo-500 focus:ring-indigo-500;
+}
+
+/* Button styles */
+.btn {
+    @apply px-4 py-2 rounded-md transition-colors;
+}
+
+.btn-primary {
+    @apply bg-indigo-600 text-white hover:bg-indigo-700;
+}
+
+.btn-secondary {
+    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+}
+
+/* Card styles */
+.card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden;
+}
+
+.card-body {
+    @apply p-4;
+}
+
+/* Alert styles */
+.alert {
+    @apply p-4 rounded-md mb-4;
+}
+
+.alert-success {
+    @apply bg-green-100 text-green-700;
+}
+
+.alert-error {
+    @apply bg-red-100 text-red-700;
+}

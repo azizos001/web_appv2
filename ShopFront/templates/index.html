@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}ShopFront - Home{% endblock %}
+
+{% block content %}
+<div class="relative bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+                Welcome to ShopFront
+            </h1>
+            <p class="mt-4 text-xl text-gray-100">
+                Your One-Stop Shop for the Best Deals and Products
+            </p>
+            <div class="mt-8">
+                <a href="/products" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
+                    Explore Products
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8">Featured Products</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for product in products[:6] %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-800">{{ product.name }}</h3>
+                <p class="text-sm text-gray-600 mt-1">{{ product.description }}</p>
+                <div class="mt-4 flex items-center justify-between">
+                    <span class="text-xl font-bold text-indigo-600">${{ "%.2f"|format(product.price) }}</span>
+                    <button class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700" 
+                            onclick="addToCart('{{ product._id }}')">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function addToCart(productId) {
+    // Add to cart functionality will be implemented here
+    console.log('Adding product to cart:', productId);
+}
+</script>
+{% endblock %}

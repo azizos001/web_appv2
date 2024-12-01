@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}ShopFront - Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">My Profile</h1>
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <form id="profile-form" class="space-y-6">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" id="name" name="name" 
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" 
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                <textarea id="address" name="address" rows="3" 
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+            </div>
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                <input type="tel" id="phone" name="phone" 
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div class="flex justify-end">
+                <button type="submit" 
+                        class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6">Order History</h2>
+    <div id="orders" class="space-y-4">
+        <!-- Order history will be dynamically loaded here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadProfile() {
+    try {
+        const response = await fetch('/api/profile/current');
+        if (response.ok) {
+            const profile = await response.json();
+            document.getElementById('name').value = profile.name || '';
+            document.getElementById('email').value = profile.email || '';
+            document.getElementById('address').value = profile.address || '';
+            document.getElementById('phone').value = profile.phone || '';
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error);
+    }
+}
+
+async function loadOrders() {
+    try {
+        const response = await fetch('/api/profile/current/orders');
+        if (response.ok) {
+            const orders = await response.json();
+            const ordersContainer = document.getElementById('orders');
+            
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = '<p class="text-gray-600">No orders found</p>';
+                return;
+            }
+
+            ordersContainer.innerHTML = orders.map(order => `
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold">Order #${order._id}</p>
+                            <p class="text-gray-600">Date: ${new Date(order.created_at).toLocaleDateString()}</p>
+                        </div>
+                        <span class="text-lg font-bold text-indigo-600">$${order.total_amount.toFixed(2)}</span>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-600">Status: ${order.status}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error loading orders:', error);
+    }
+}
+
+document.getElementById('profile-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+        const response = await fetch('/api/profile/current', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            alert('Profile updated successfully');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('Error updating profile');
+    }
+});
+
+// Load profile and orders when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadProfile();
+    loadOrders();
+});
+</script>
+{% endblock %}

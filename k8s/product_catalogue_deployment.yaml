@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-catalogue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: product-catalogue
+  template:
+    metadata:
+      labels:
+        app: product-catalogue
+    spec:
+      containers:
+      - name: product-catalogue
+        image: product-catalogue:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5001
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongodb:27017/ecommerce"
+        livenessProbe:
+          httpGet:
+            path: /api/products
+            port: 5001
+          initialDelaySeconds: 5
+          periodSeconds: 10
