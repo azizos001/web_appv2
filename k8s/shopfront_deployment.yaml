@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shopfront
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: shopfront
+  template:
+    metadata:
+      labels:
+        app: shopfront
+    spec:
+      containers:
+      - name: shopfront
+        image: shopfront:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongodb:27017/ecommerce"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
